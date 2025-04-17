@@ -114,6 +114,29 @@ function App() {
     localStorage.setItem("pomoDarioStats", JSON.stringify(stats));
   }, [stats]);
 
+  // Play alarm sound - MOVED THIS FUNCTION BEFORE THE USEEFFECT THAT USES IT
+  const playAlarmSound = () => {
+    const audio = new Audio(`/sounds/${settings.alarmSound}.wav`);
+    audio.volume = settings.alarmVolume;
+    audio.play().catch((error) => console.log("Error playing sound:", error));
+
+    // Show notification if permission granted
+    if ("Notification" in window && Notification.permission === "granted") {
+      let message = "";
+
+      if (timerMode === "pomodoro") {
+        message = "Pomodoro complete! Time for a break.";
+      } else {
+        message = "Break complete! Time to focus.";
+      }
+
+      new Notification("PomoDario", {
+        body: message,
+        icon: "/logo192.png",
+      });
+    }
+  };
+
   // Timer logic
   useEffect(() => {
     let interval = null;
@@ -241,29 +264,6 @@ function App() {
       setTimeLeft(settings.shortBreakTime * 60);
     } else {
       setTimeLeft(settings.longBreakTime * 60);
-    }
-  };
-
-  // Play alarm sound
-  const playAlarmSound = () => {
-    const audio = new Audio(`/sounds/${settings.alarmSound}.wav`);
-    audio.volume = settings.alarmVolume;
-    audio.play().catch((error) => console.log("Error playing sound:", error));
-
-    // Show notification if permission granted
-    if ("Notification" in window && Notification.permission === "granted") {
-      let message = "";
-
-      if (timerMode === "pomodoro") {
-        message = "Pomodoro complete! Time for a break.";
-      } else {
-        message = "Break complete! Time to focus.";
-      }
-
-      new Notification("PomoDario", {
-        body: message,
-        icon: "/logo192.png",
-      });
     }
   };
 
