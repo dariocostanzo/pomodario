@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/pomodario/static/css/main.b884cc9b.css",
-    "main.js": "/pomodario/static/js/main.7962c4cf.js",
+    "main.js": "/pomodario/static/js/main.90337f40.js",
     "static/js/453.2c77bdd9.chunk.js": "/pomodario/static/js/453.2c77bdd9.chunk.js",
     "index.html": "/pomodario/index.html",
     "main.b884cc9b.css.map": "/pomodario/static/css/main.b884cc9b.css.map",
-    "main.7962c4cf.js.map": "/pomodario/static/js/main.7962c4cf.js.map",
+    "main.90337f40.js.map": "/pomodario/static/js/main.90337f40.js.map",
     "453.2c77bdd9.chunk.js.map": "/pomodario/static/js/453.2c77bdd9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.b884cc9b.css",
-    "static/js/main.7962c4cf.js"
+    "static/js/main.90337f40.js"
   ]
 }
