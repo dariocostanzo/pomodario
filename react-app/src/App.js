@@ -114,11 +114,38 @@ function App() {
     localStorage.setItem("pomoDarioStats", JSON.stringify(stats));
   }, [stats]);
 
-  // Play alarm sound - MOVED THIS FUNCTION BEFORE THE USEEFFECT THAT USES IT
+  // Play alarm sound - Simplified approach with direct URL
   const playAlarmSound = () => {
-    const audio = new Audio(`/sounds/${settings.alarmSound}.wav`);
-    audio.volume = settings.alarmVolume;
-    audio.play().catch((error) => console.log("Error playing sound:", error));
+    // Try using a direct URL to the sound file
+    const audio = new Audio(
+      `${window.location.origin}/pomodario/sounds/${settings.alarmSound}.wav`
+    );
+
+    console.log("Playing sound from:", audio.src);
+
+    // Set volume to maximum for testing
+    audio.volume = 1.0;
+
+    // Play the sound immediately
+    audio.play().catch((error) => {
+      console.error("Error playing sound:", error);
+
+      // Fallback to a browser beep if the sound file can't be played
+      try {
+        // Create a simple beep using the Web Audio API
+        const audioContext = new (window.AudioContext ||
+          window.webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        oscillator.type = "sine";
+        oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+        oscillator.connect(audioContext.destination);
+        oscillator.start();
+        oscillator.stop(audioContext.currentTime + 0.5);
+        console.log("Played fallback beep sound");
+      } catch (beepError) {
+        console.error("Could not play fallback beep:", beepError);
+      }
+    });
 
     // Show notification if permission granted
     if ("Notification" in window && Notification.permission === "granted") {
@@ -200,13 +227,9 @@ function App() {
         setTimerMode("pomodoro");
         setTimeLeft(settings.pomodoroTime * 60);
 
-        // Auto start pomodoro if enabled
-        if (settings.autoStartPomodoros) {
-          setIsActive(true);
-          setIsPaused(false);
-        } else {
-          setIsActive(false);
-        }
+        // Fixed: Don't auto-start the next timer, just reset
+        setIsActive(false);
+        setIsPaused(false);
       }
     }
 
